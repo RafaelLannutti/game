@@ -14,7 +14,6 @@ class Heroe inherits Personaje(nombre = "Tupac", position = game.at(0, 2)) {
 
   method nivelActual(nuevoNivel) {
     nivelActual = nuevoNivel
-    
   }
   var property cantPapasMax = 1
   const property papasActivas = []

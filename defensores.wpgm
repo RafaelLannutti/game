@@ -5,104 +5,104 @@ import obstaculos.*
 import villanos.*
 
 program defensores {
+  game.width(15)
+  game.height(15)
+  game.title("Defensores")
+  gestorDeNiveles.mostrarMenu()
+  const heroe = new Heroe()
+
   
-	game.width(15)
-	game.height(15)
   
 
+  // --- CONTROLES DE MOVIMIENTO (Bloqueados si no estás jugando) ---
+  keyboard.up().onPressDo({
+    if (gestorDeNiveles.estaJugando()) heroe.moverseHacia(norte)
+  })
+  keyboard.down().onPressDo({
+    if (gestorDeNiveles.estaJugando()) heroe.moverseHacia(sur)
+  })
+  keyboard.left().onPressDo({
+    if (gestorDeNiveles.estaJugando()) heroe.moverseHacia(oeste)
+  })
+  keyboard.right().onPressDo({
+    if (gestorDeNiveles.estaJugando()) heroe.moverseHacia(este)
+  })
+  keyboard.space().onPressDo({
+    if (gestorDeNiveles.estaJugando()) heroe.lanzarPapa()
+  })
 
-	var estado = "menu"
-	const heroe = new Heroe()
-
-	
-	game.addVisual(pantallaInicio)
-	
-
-	// --- Teclas de Movimiento ---
-	keyboard.up().onPressDo({
-		if (estado == "jugando") heroe.moverseHacia(norte)
-	})
-	keyboard.down().onPressDo({
-		if (estado == "jugando") heroe.moverseHacia(sur)
-	})
-	keyboard.left().onPressDo({
-		if (estado == "jugando") heroe.moverseHacia(oeste)
-	})
-	keyboard.right().onPressDo({
-		if (estado == "jugando") heroe.moverseHacia(este)
-	})
-
-	keyboard.enter().onPressDo({
-		if (estado == "menu") {
-			
-			game.removeVisual(pantallaInicio)
+  // --- TECLA ENTER: CONTROLADOR PRINCIPAL DE PANTALLAS ---
+  keyboard.enter().onPressDo({
+    
+    // ESCENARIO A: Si el usuario está parado en el Menú de Inicio
+    if (gestorDeNiveles.estaEnMenu()) {
       
-			game.addVisual(new CorazonHUD(position = game.at(0, 14), indice = 1, personaje = heroe))
-			game.addVisual(new CorazonHUD(position = game.at(1, 14), indice = 2, personaje = heroe))
-			game.addVisual(new CorazonHUD(position = game.at(2, 14), indice = 3, personaje = heroe))
-			game.addVisual(new BarraEnergiaHUD(position = game.at(4, 14), personaje = heroe))
-			game.addVisual(new NivelHUD(position = game.at(13, 14), personaje = heroe))
-			game.addVisual(new DigitoPuntajeHUD(position = game.at(8, 14), indice = 0, personaje = heroe))
-			game.addVisual(new DigitoPuntajeHUD(position = game.at(9, 14), indice = 1, personaje = heroe))
-			game.addVisual(new DigitoPuntajeHUD(position = game.at(10, 14), indice = 2, personaje = heroe))
+      // 1. Configuramos el primer nivel (Borra el menú e introduce el fondo y villanos)
+      gestorDeNiveles.configurarNivel1(heroe)
 
-			gestorDeNiveles.configurarNivel1(heroe)
-			estado = "jugando"
-		} else {
-			
-			const cofre = gestorDeNiveles.cofreActual()
-			const poste = gestorDeNiveles.posteActual()
-			const llave = gestorDeNiveles.llaveActual()
+      // 2. Cargamos el HUD dinámicamente "en caliente" para que aparezca arriba de todo
+      game.addVisual(new CorazonHUD(position = game.at(0, 14), indice = 1, personaje = heroe))
+      game.addVisual(new CorazonHUD(position = game.at(1, 14), indice = 2, personaje = heroe))
+      game.addVisual(new CorazonHUD(position = game.at(2, 14), indice = 3, personaje = heroe))
+      game.addVisual(new BarraEnergiaHUD(position = game.at(4, 14), personaje = heroe))
+      game.addVisual(new NivelHUD(position = game.at(13, 14), personaje = heroe))
+      game.addVisual(new DigitoPuntajeHUD(position = game.at(8, 14), indice = 0, personaje = heroe))
+      game.addVisual(new DigitoPuntajeHUD(position = game.at(9, 14), indice = 1, personaje = heroe))
+      game.addVisual(new DigitoPuntajeHUD(position = game.at(10, 14), indice = 2, personaje = heroe))
 
-			if (heroe.position() == cofre.position() && !cofre.estaAbierto()) {
-				cofre.abrir()
-				game.addVisual(llave)
-				heroe.tieneLlave(true)
-				game.say(heroe, "¡Tengo la llave!")
-				game.onTick(3000, "borrarMensajeLlave", {
-					game.say(heroe, "")
-					game.removeTickEvent("borrarMensajeLlave")
-				})
-			} else if (heroe.position() == poste.position()) {
-				if (heroe.tieneLlave()) {
-					gestorDeNiveles.detenerMovimientoVillano()
-					const objetosQueCaen = gestorDeNiveles.obtenerObjetosQueCaen(heroe)
-					game.onTick(300, "caidaObjetos", {
-						objetosQueCaen.forEach({ obj =>
-							if (game.hasVisual(obj)) {
-								obj.position(obj.position().down(1))
-								if (obj.position().y() < -3) {
-									game.removeVisual(obj)
-								}
-							}
-						})
-						if (objetosQueCaen.all({ obj => !game.hasVisual(obj) })) {
-							game.removeTickEvent("caidaObjetos")
-							game.say(heroe, "¡Detuvimos la destruccion!")
-							game.onTick(3000, "borrarMensajeFin", {
-								game.say(heroe, "")
-								game.removeTickEvent("borrarMensajeFin")
-								if (heroe.nivelActual() == nivel1) {
-									gestorDeNiveles.pasarANivel2(heroe)
-								}
-							})
-						}
-					})
-				} else {
-					game.say(heroe, "Necesito la llave!")
-					game.onTick(3000, "borrarMensajeError", {
-						game.say(heroe, "")
-						game.removeTickEvent("borrarMensajeError")
-					})
-				}
-			}
-		}
-	})
+    } else {
+      // ESCENARIO B: Si ya está jugando, el ENTER mantiene tu lógica original (Cofres y Postes)
+      const cofre = gestorDeNiveles.cofreActual()
+      const poste = gestorDeNiveles.posteActual()
+      const llave = gestorDeNiveles.llaveActual()
+      
+      if (heroe.position() == cofre.position() && !cofre.estaAbierto()) {
+        cofre.abrir()
+        game.addVisual(llave)
+        heroe.tieneLlave(true)
+        game.say(heroe, "¡Tengo la llave!")
+        game.onTick(3000, "borrarMensajeLlave", {
+          game.say(heroe, "")
+          game.removeTickEvent("borrarMensajeLlave")
+        })
+      } else if (heroe.position() == poste.position()) {
+        if (heroe.tieneLlave()) {
+          gestorDeNiveles.detenerMovimientoVillano()
+          const objetosQueCaen = gestorDeNiveles.obtenerObjetosQueCaen(heroe)
+          
+          game.onTick(300, "caidaObjetos", {
+            objetosQueCaen.forEach({ obj =>
+              if (game.hasVisual(obj)) {
+                obj.position(obj.position().down(1))
+                if (obj.position().y() < -3) {
+                  game.removeVisual(obj)
+                }
+              }
+            })
+            
+            if (objetosQueCaen.all({ obj => !game.hasVisual(obj) })) {
+              game.removeTickEvent("caidaObjetos")
+              game.say(heroe, "¡Detuvimos la destruccion!")
+              game.onTick(3000, "borrarMensajeFin", {
+                game.say(heroe, "")
+                game.removeTickEvent("borrarMensajeFin")
+                
+                if (heroe.nivelActual() == nivel1) {
+                  gestorDeNiveles.pasarANivel2(heroe)
+                }
+              })
+            }
+          })
+        } else {
+          game.say(heroe, "Necesito la llave!")
+          game.onTick(3000, "borrarMensajeError", {
+            game.say(heroe, "")
+            game.removeTickEvent("borrarMensajeError")
+          })
+        }
+      }
+    }
+  })
 
-	keyboard.space().onPressDo({
-		if (estado == "jugando") heroe.lanzarPapa()
-	})
-
-	game.start()
-
+  game.start()
 }

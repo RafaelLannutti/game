@@ -271,50 +271,55 @@ class Papa {
 }
 
 // ============================
-// PANTALLA DE INICIO
-// ============================
-
-
-
-
-
-object pantallaInicio {
-	var property position = game.at(0, 0)
-	method image() = "menuInicio.png"
-	method recibirImpacto(papa) {}
-}
-
-class FondoNivel {
-  var property image
-  var property position = game.at(0, 0)
-  method recibirImpacto(papa) {}
-}
-
-// ============================
 // GESTOR DE NIVELES
 // ============================
+object menuInicio {
+  method image() = "menuInicio.png" // Asegurate de tener esta imagen en tu carpeta de assets
+  method position() = game.at(0, 0)
+}
 
 object gestorDeNiveles {
   var property cofreActual = null
   var property posteActual = null
   var property villanoActual = null
   var property llaveActual = null
-  var property fondoActual = null 
   const objetosNivel = []
   var tickMovimientoActivo = false
-  
-  
+
+  // NUEVO: Agregamos las banderas de estado para controlar las pantallas
+  var property estaEnMenu = true
+  var property estaJugando = false
+
+  // NUEVO: Método para arrancar mostrando únicamente el menú visual
+  method mostrarMenu() {
+    estaEnMenu = true
+    estaJugando = false
+    game.boardGround(nivel1.imagenFondo())
+    if (!game.hasVisual(menuInicio)){game.addVisual(menuInicio)}
+  }
 
   method configurarNivel1(heroe) {
+    // NUEVO: Cambiamos los estados porque el jugador ya entró a la partida
+    estaEnMenu = false
+    estaJugando = true
+
+    // NUEVO: Quitamos el menú de la pantalla antes de dibujar el fondo
+    if (game.hasVisual(menuInicio)) {
+      game.removeVisual(menuInicio)
+    }
+
+    // Ahora sí ponemos el fondo del Nivel 1 de forma segura
+    game.boardGround(nivel1.imagenFondo())
+
     self.limpiarNivel()
+    
+    posteActual = new PosteConCaja(position = game.at(14, 11))
+    cofreActual = new Cofre(position = game.at(0, 11))
+    
+    // Agregamos al héroe y seteamos sus atributos iniciales
     heroe.nivelActual(nivel1)
-    heroe.nombre("Tupac")
     heroe.position(game.at(0, 2))
     heroe.tieneLlave(false)
-
-    fondoActual = new FondoNivel (image = nivel1.imagenFondo())
-    game.addVisual(fondoActual)
-    objetosNivel.add(fondoActual)
     if (!game.hasVisual(heroe)) game.addVisual(heroe)
 
     nivel1.obstaculos().forEach({ obs => 
@@ -322,52 +327,9 @@ object gestorDeNiveles {
       objetosNivel.add(obs)
     })
 
-    posteActual = new PosteConCaja(position = game.at(14, 11))
     game.addVisual(posteActual)
     objetosNivel.add(posteActual)
     
-    cofreActual = new Cofre(position = game.at(0, 11))
-    game.addVisual(cofreActual)
-    objetosNivel.add(cofreActual)
-
-    llaveActual = new Llave(position = game.at(12, 14))
-    
-    villanoActual = new Villano(
-      position = game.at(7, 3),
-      nombre = "demoledor",
-      direccion = este,
-      camino = nivel1.caminoDemoledor(),
-      mensajesAtaque = ["TOMA ESTO!", "JAJAJAJA!", "TE VA A DOLER!", "FUERA DE ACA!", "SUFRE!", "SIENTE MI PODER!", "AAAAAAH!"]
-    )
-    game.addVisual(villanoActual)
-    objetosNivel.add(villanoActual)
-
-    self.iniciarMovimientoVillano(heroe)
-  }
-
-  method pasarANivel2(heroe) {
-    self.limpiarNivel()
-    heroe.nivelActual(nivel2)
-    heroe.nombre("Pachita")
-    heroe.position(game.at(0, 2))
-    heroe.tieneLlave(false)
-
-    fondoActual = new FondoNivel(image = nivel2.imagenFondo())
-    game.addVisual(fondoActual)
-    objetosNivel.add(fondoActual)
-
-    if (!game.hasVisual(heroe)) game.addVisual(heroe)
-    
-    nivel2.obstaculos().forEach({ obs => 
-      game.addVisual(obs)
-      objetosNivel.add(obs)
-    })
-
-    posteActual = new PosteConCaja(position = game.at(14, 11))
-    game.addVisual(posteActual)
-    objetosNivel.add(posteActual)
-    
-    cofreActual = new Cofre(position = game.at(0, 11))
     game.addVisual(cofreActual)
     objetosNivel.add(cofreActual)
 
@@ -380,6 +342,37 @@ object gestorDeNiveles {
       camino = [este, oeste],
       mensajesAtaque = ["TOMA ESTO!"]
     )
+    game.addVisual(villanoActual)
+    objetosNivel.add(villanoActual)
+
+    self.iniciarMovimientoVillano(heroe)
+  }
+
+  method pasarANivel2(heroe) {
+    self.limpiarNivel()
+    // Si pasamos de nivel, nos aseguramos que las banderas sigan en modo juego
+    estaEnMenu = false
+    estaJugando = true
+
+    heroe.nivelActual(nivel2)
+    game.boardGround(nivel2.imagenFondo())
+    heroe.position(game.at(0, 1))
+    heroe.tieneLlave(false)
+    
+    posteActual = new PosteConCaja(position = game.at(1, 12))
+    cofreActual = new Cofre(position = game.at(14, 12))
+    
+    nivel2.obstaculos().forEach({ obs => 
+      game.addVisual(obs)
+      objetosNivel.add(obs)
+    })
+
+    game.addVisual(posteActual)
+    objetosNivel.add(posteActual)
+    
+    game.addVisual(cofreActual)
+    objetosNivel.add(cofreActual)
+
     game.addVisual(villanoActual)
     objetosNivel.add(villanoActual)
 
@@ -419,11 +412,6 @@ object gestorDeNiveles {
   }
 
   method obtenerObjetosQueCaen(heroe) {
-    const objetos = []
-    heroe.nivelActual().obstaculos().forEach({ obs => objetos.add(obs) })
-    if (!villanoActual.estaTransformado()) {
-      objetos.add(villanoActual)
-    }
-    return objetos
+    return objetosNivel.filter({ obj => obj.position().x() == heroe.position().x() })
   }
 }
