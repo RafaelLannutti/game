@@ -1,0 +1,14 @@
+# Proyecto Defensores del Glaciar
+
+Debido a la aprobación de la ley de glaciares, una inescrupulosa empresa que ya opera del otro lado de la cordillera comienza a hacer lo mismo del lado Argentino. La Pacha Mama elije a sus campeones de ambos lados para librar la batalla por el medio ambiente
+
+## Personajes
+
+- Tupac: joven jujeño.....
+- Pachita: joven de Antofagasta.... 
+
+Ambos fueron bendecidos con la habilidad de arrojar papa "benditas" que convierten a los rivales en amables animales de la cordillera.
+
+### Desarrollo:
+
+El juego consta de 6 niveles, 3 para cada héroe, y un final donde (ambos) se enfrentan al jefe de la corporación.
