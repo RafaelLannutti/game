@@ -14,9 +14,9 @@ program defensores {
 	var estado = "menu"
 	const heroe = new Heroe()
 
-	// --- Pantalla de inicio ---
-	game.boardGround("menuInicio.png") // fondo de menú, tamaño tablero completo
-	game.addVisual(pantallaInicio)     // opcional: un logo/texto arriba del fondo
+	
+	game.addVisual(pantallaInicio)
+	
 
 	// --- Teclas de Movimiento ---
 	keyboard.up().onPressDo({

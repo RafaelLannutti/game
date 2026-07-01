@@ -279,11 +279,16 @@ class Papa {
 
 
 object pantallaInicio {
-	var property position = game.at(7, 7)
+	var property position = game.at(0, 0)
 	method image() = "menuInicio.png"
 	method recibirImpacto(papa) {}
 }
 
+class FondoNivel {
+  var property image
+  var property position = game.at(0, 0)
+  method recibirImpacto(papa) {}
+}
 
 // ============================
 // GESTOR DE NIVELES
@@ -294,6 +299,7 @@ object gestorDeNiveles {
   var property posteActual = null
   var property villanoActual = null
   var property llaveActual = null
+  var property fondoActual = null 
   const objetosNivel = []
   var tickMovimientoActivo = false
   
@@ -301,12 +307,14 @@ object gestorDeNiveles {
 
   method configurarNivel1(heroe) {
     self.limpiarNivel()
-    game.boardGround(nivel1.imagenFondo())
     heroe.nivelActual(nivel1)
     heroe.nombre("Tupac")
     heroe.position(game.at(0, 2))
     heroe.tieneLlave(false)
 
+    fondoActual = new FondoNivel (image = nivel1.imagenFondo())
+    game.addVisual(fondoActual)
+    objetosNivel.add(fondoActual)
     if (!game.hasVisual(heroe)) game.addVisual(heroe)
 
     nivel1.obstaculos().forEach({ obs => 
@@ -339,13 +347,14 @@ object gestorDeNiveles {
 
   method pasarANivel2(heroe) {
     self.limpiarNivel()
-    
-    game.boardGround(nivel2.imagenFondo())
-
     heroe.nivelActual(nivel2)
     heroe.nombre("Pachita")
     heroe.position(game.at(0, 2))
     heroe.tieneLlave(false)
+
+    fondoActual = new FondoNivel(image = nivel2.imagenFondo())
+    game.addVisual(fondoActual)
+    objetosNivel.add(fondoActual)
 
     if (!game.hasVisual(heroe)) game.addVisual(heroe)
     
