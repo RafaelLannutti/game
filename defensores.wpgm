@@ -10,7 +10,7 @@ program defensores {
   const heroe = new Heroe()
   
   // --- HUD / Indicadores ---
-  // Vidas (3 corazones)
+  // Vidas (3 corazones )
   game.addVisual(new CorazonHUD(position = game.at(0, 14), indice = 1, personaje = heroe))
   game.addVisual(new CorazonHUD(position = game.at(1, 14), indice = 2, personaje = heroe))
   game.addVisual(new CorazonHUD(position = game.at(2, 14), indice = 3, personaje = heroe))
