@@ -271,6 +271,21 @@ class Papa {
 }
 
 // ============================
+// PANTALLA DE INICIO
+// ============================
+
+
+
+
+
+object pantallaInicio {
+	var property position = game.at(7, 7)
+	method image() = "menuInicio.png"
+	method recibirImpacto(papa) {}
+}
+
+
+// ============================
 // GESTOR DE NIVELES
 // ============================
 
@@ -281,10 +296,12 @@ object gestorDeNiveles {
   var property llaveActual = null
   const objetosNivel = []
   var tickMovimientoActivo = false
+  
+  
 
   method configurarNivel1(heroe) {
     self.limpiarNivel()
-    
+    game.boardGround(nivel1.imagenFondo())
     heroe.nivelActual(nivel1)
     heroe.nombre("Tupac")
     heroe.position(game.at(0, 2))
@@ -323,6 +340,8 @@ object gestorDeNiveles {
   method pasarANivel2(heroe) {
     self.limpiarNivel()
     
+    game.boardGround(nivel2.imagenFondo())
+
     heroe.nivelActual(nivel2)
     heroe.nombre("Pachita")
     heroe.position(game.at(0, 2))
