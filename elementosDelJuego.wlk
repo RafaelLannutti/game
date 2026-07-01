@@ -349,6 +349,7 @@ object gestorDeNiveles {
   }
 
   method pasarANivel2(heroe) {
+    
     self.limpiarNivel()
     // Si pasamos de nivel, nos aseguramos que las banderas sigan en modo juego
     estaEnMenu = false
@@ -359,9 +360,18 @@ object gestorDeNiveles {
     heroe.position(game.at(0, 1))
     heroe.tieneLlave(false)
     
-    posteActual = new PosteConCaja(position = game.at(1, 12))
-    cofreActual = new Cofre(position = game.at(14, 12))
+    posteActual = new PosteConCaja(position = game.at(14, 11))
+    cofreActual = new Cofre(position = game.at(0, 11))
     
+    
+    
+    villanoActual = new Villano(
+      position = game.at(7, 3),
+      nombre = "demoledor",
+      direccion = este,
+      camino = [este, oeste],
+      mensajesAtaque = ["TOMA ESTO!"]
+    )
     nivel2.obstaculos().forEach({ obs => 
       game.addVisual(obs)
       objetosNivel.add(obs)
@@ -375,7 +385,7 @@ object gestorDeNiveles {
 
     game.addVisual(villanoActual)
     objetosNivel.add(villanoActual)
-
+    
     self.iniciarMovimientoVillano(heroe)
   }
 
@@ -412,6 +422,11 @@ object gestorDeNiveles {
   }
 
   method obtenerObjetosQueCaen(heroe) {
-    return objetosNivel.filter({ obj => obj.position().x() == heroe.position().x() })
+    const objetos = []
+    heroe.nivelActual().obstaculos().forEach({ obs => objetos.add(obs) })
+    if (!villanoActual.estaTransformado()) {
+      objetos.add(villanoActual)
+    }
+    return objetos
   }
 }
