@@ -10,8 +10,6 @@ program defensores {
   game.title("Defensores")
   gestorDeNiveles.mostrarMenu()
   const heroe = new Heroe()
-
-  
   
 
   // --- CONTROLES DE MOVIMIENTO (Bloqueados si no estás jugando) ---

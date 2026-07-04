@@ -22,7 +22,7 @@ class Villano inherits Personaje {
     return nombre + direccion.numero() + frame + ".png"
   }
 
-  method veAl(heroe) {
+  method veAl(heroe) { //Raro de Areglar debido a que esto sirve para que el villano se fije hay un heroe en alguna de las direcciones 
     const vx = self.position().x()
     const vy = self.position().y()
     const hx = heroe.position().x()

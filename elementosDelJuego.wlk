@@ -2,6 +2,7 @@ import wollok.game.*
 import obstaculos.*
 import villanos.*
 
+
 // ============================
 // DIRECCIONES 
 // ============================
@@ -344,7 +345,7 @@ object gestorDeNiveles {
       position = game.at(7, 5),
       nombre = "envenenador",
       direccion = este,
-      camino = [este, oeste],
+      camino = [norte,sur,este,oeste],
       mensajesAtaque = ["TOMA ESTO!"]
     )
     game.addVisual(villanoActual)
@@ -374,7 +375,7 @@ object gestorDeNiveles {
       position = game.at(7, 5), 
       nombre = "demoledor",
       direccion = este,
-      camino = [este, oeste],
+      camino = [norte,sur,este,oeste],
       mensajesAtaque = ["TOMA ESTO!"]
     )
     
