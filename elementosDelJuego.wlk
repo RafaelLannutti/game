@@ -124,15 +124,10 @@ object nivel1 inherits Nivel(
 object nivel2 inherits Nivel(
   imagenHUD = "nivel2.png",
   imagenFondo = "fondo2.png",
-  yMinimo = 3, // <-- Volvemos a 2 para que el límite sea la nieve
+  yMinimo = 3,
   obstaculosDelNivel = [
-    // Camión abajo a la izquierda (bien apoyado en la tierra)
     new Obstaculo(position = game.at(2, 4), imagen = "Camion1.png", anchoCeldas = 3, altoCeldas = 3),
-    
-    // Camión del centro alto (en el fondo, cerca de las montañas)
     new Obstaculo(position = game.at(6, 7), imagen = "Camion1.png", anchoCeldas = 3, altoCeldas = 3),
-    
-    // Camión de la derecha
     new Obstaculo(position = game.at(11, 4), imagen = "Camion1.png", anchoCeldas = 3, altoCeldas = 3)
   ]
 ) {
@@ -151,9 +146,9 @@ class Cofre {
   var property estaAbierto = false
 
   method image() {
-    if (estaAbierto) return "cofre.png"
-    else return "cofreC.png"
-  }
+    if (estaAbierto){ return "cofre.png"
+    } else{ return "cofreC.png"
+  }}
 
   method abrir() {
     estaAbierto = true
