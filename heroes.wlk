@@ -1,7 +1,6 @@
 import wollok.game.*
 import elementosDelJuego.*
 
-
 class Heroe inherits Personaje(nombre = "Tupac", position = game.at(0, 2)) {
   var energia = 100
   var vidas = 3

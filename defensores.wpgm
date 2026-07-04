@@ -12,7 +12,7 @@ program defensores {
   const heroe = new Heroe()
   
 
-  // --- CONTROLES DE MOVIMIENTO (Bloqueados si no estás jugando) ---
+
   keyboard.up().onPressDo({
     if (gestorDeNiveles.estaJugando()) heroe.moverseHacia(norte)
   })
@@ -29,16 +29,13 @@ program defensores {
     if (gestorDeNiveles.estaJugando()) heroe.lanzarPapa()
   })
 
-  // --- TECLA ENTER: CONTROLADOR PRINCIPAL DE PANTALLAS ---
+
   keyboard.enter().onPressDo({
     
-    // ESCENARIO A: Si el usuario está parado en el Menú de Inicio
     if (gestorDeNiveles.estaEnMenu()) {
-      
-      // 1. Configuramos el primer nivel (Borra el menú e introduce el fondo y villanos)
       gestorDeNiveles.configurarNivel1(heroe)
 
-      // 2. Cargamos el HUD dinámicamente "en caliente" para que aparezca arriba de todo
+      
       game.addVisual(new CorazonHUD(position = game.at(0, 14), indice = 1, personaje = heroe))
       game.addVisual(new CorazonHUD(position = game.at(1, 14), indice = 2, personaje = heroe))
       game.addVisual(new CorazonHUD(position = game.at(2, 14), indice = 3, personaje = heroe))
@@ -49,7 +46,6 @@ program defensores {
       game.addVisual(new DigitoPuntajeHUD(position = game.at(10, 14), indice = 2, personaje = heroe))
 
     } else {
-      // ESCENARIO B: Si ya está jugando, el ENTER mantiene tu lógica original (Cofres y Postes)
       const cofre = gestorDeNiveles.cofreActual()
       const poste = gestorDeNiveles.posteActual()
       const llave = gestorDeNiveles.llaveActual()

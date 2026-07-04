@@ -2,11 +2,6 @@ import wollok.game.*
 import obstaculos.*
 import villanos.*
 
-
-// ============================
-// DIRECCIONES 
-// ============================
-
 object norte {
   method siguiente(position) = position.up(1)
   method numero() = 2
@@ -26,10 +21,6 @@ object oeste {
   method siguiente(position) = position.left(1)
   method numero() = 4
 }
-
-// ============================
-// PERSONAJES (Clase Base)
-// ============================
 
 class Personaje {
   var property position = game.at(0, 0)
@@ -53,10 +44,6 @@ class Personaje {
 
   method recibirImpacto(papa) {}
 }
-
-// ============================
-// NIVELES
-// ============================
 
 class Nivel {
   var property imagenHUD
@@ -126,10 +113,6 @@ object nivel2 inherits Nivel(
     return 10
   }
 }
-// ============================
-// ELEMENTOS DEL JUEGO
-// ============================
-
 class Cofre {
   var property position
   var property estaAbierto = false
@@ -157,10 +140,6 @@ class PosteConCaja {
   method image() = "poste.png"
   method recibirImpacto(papa) {}
 }
-
-// ============================
-// INDICADORES (HUD)
-// ============================
 
 class CorazonHUD {
   var property position
@@ -225,10 +204,6 @@ class DigitoPuntajeHUD {
   method recibirImpacto(papa) {}
 }
 
-// ============================
-// PROYECTILES
-// ============================
-
 class Papa {
   var property position
   var property direccion
@@ -276,11 +251,8 @@ class Papa {
   method recibirImpacto(papa) {}
 }
 
-// ============================
-// GESTOR DE NIVELES
-// ============================
 object menuInicio {
-  method image() = "menuInicio.png" // Asegurate de tener esta imagen en tu carpeta de assets
+  method image() = "menuInicio.png" 
   method position() = game.at(0, 0)
 }
 
@@ -290,13 +262,10 @@ object gestorDeNiveles {
   var property villanoActual = null
   var property llaveActual = null
   const objetosNivel = []
-  var tickMovimientoActivo = false
-
-  // NUEVO: Agregamos las banderas de estado para controlar las pantallas
+  var tickMovimientoActivo = false 
   var property estaEnMenu = true
   var property estaJugando = false
 
-  // NUEVO: Método para arrancar mostrando únicamente el menú visual
   method mostrarMenu() {
     estaEnMenu = true
     estaJugando = false
@@ -305,24 +274,16 @@ object gestorDeNiveles {
   }
 
   method configurarNivel1(heroe) {
-    // NUEVO: Cambiamos los estados porque el jugador ya entró a la partida
     estaEnMenu = false
     estaJugando = true
-
-    // NUEVO: Quitamos el menú de la pantalla antes de dibujar el fondo
     if (game.hasVisual(menuInicio)) {
       game.removeVisual(menuInicio)
     }
-
-    // Ahora sí ponemos el fondo del Nivel 1 de forma segura
     game.boardGround(nivel1.imagenFondo())
-
     self.limpiarNivel()
-    
     posteActual = new PosteConCaja(position = game.at(14, 10))
     cofreActual = new Cofre(position = game.at(0, 10))
     
-    // Agregamos al héroe y seteamos sus atributos iniciales
     heroe.nivelActual(nivel1)
     heroe.position(game.at(0, 4))
     heroe.tieneLlave(false)
@@ -358,19 +319,13 @@ object gestorDeNiveles {
     self.limpiarNivel()
     estaEnMenu = false
     estaJugando = true
-
     heroe.nivelActual(nivel2)
     game.boardGround(nivel2.imagenFondo())
-    
-    // Héroe arrancando sobre la nieve, no en el agujero negro
     heroe.position(game.at(0, 4)) 
     heroe.tieneLlave(false)
-    
     posteActual = new PosteConCaja(position = game.at(14, 10))
-    cofreActual = new Cofre(position = game.at(0, 10)) // Sigue arriba de la montaña
+    cofreActual = new Cofre(position = game.at(0, 10)) 
     llaveActual = new Llave(position = game.at(12, 14)) 
-    
-    // Villano verde patrullando en la zona media
     villanoActual = new Villano(
       position = game.at(7, 5), 
       nombre = "demoledor",
