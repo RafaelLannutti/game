@@ -76,7 +76,7 @@ class Nivel {
 object nivel1 inherits Nivel(
   imagenHUD = "nivel1.png",
   imagenFondo = "fondo3.png",
-  yMinimo = 2,
+  yMinimo = 3,
   obstaculosDelNivel = [
     new Obstaculo(position = game.at(3, 4), imagen = "Camion1.png", anchoCeldas = 3, altoCeldas = 3),
     new Obstaculo(position = game.at(9, 7), imagen = "Camion2.png", anchoCeldas = 3, altoCeldas = 3)
@@ -85,13 +85,13 @@ object nivel1 inherits Nivel(
   method caminoDemoledor() = [este, este, este, este, norte, norte, norte, norte, oeste, oeste, oeste, oeste, sur, sur, sur, sur]
 
   override method yMaximoPara(x) {
-    if (x==0 or x==14) return 11
-    if (x.between(1,2))  return 9
-    if (x.between(3,6)) return 11
-    if (x==7)  return 9
-    if (x.between(8,11)) return 11
-    if (x.between(12,13))  return 9
-    return 9
+    if (x==0 or x==14) return 10
+    if (x.between(1,2))  return 8
+    if (x.between(3,6)) return 10
+    if (x==7)  return 8
+    if (x.between(8,11)) return 10
+    if (x.between(12,13))  return 8
+    return 8
   }
 
   override method puntosPorDerrotar(villano) {
@@ -103,7 +103,7 @@ object nivel1 inherits Nivel(
 object nivel2 inherits Nivel(
   imagenHUD = "nivel2.png",
   imagenFondo = "fondo2.png",
-  yMinimo = 2, // <-- Volvemos a 2 para que el límite sea la nieve
+  yMinimo = 3, // <-- Volvemos a 2 para que el límite sea la nieve
   obstaculosDelNivel = [
     // Camión abajo a la izquierda (bien apoyado en la tierra)
     new Obstaculo(position = game.at(2, 4), imagen = "Camion1.png", anchoCeldas = 3, altoCeldas = 3),
@@ -117,7 +117,7 @@ object nivel2 inherits Nivel(
 ) {
   override method yMaximoPara(x) {
     if (x.between(1, 2) or x.between(12, 13)) return 9
-    return 11
+    return 10
   }
 
   override method puntosPorDerrotar(villano) {
@@ -367,12 +367,12 @@ object gestorDeNiveles {
     
     posteActual = new PosteConCaja(position = game.at(14, 10))
     cofreActual = new Cofre(position = game.at(0, 10)) // Sigue arriba de la montaña
-    llaveActual = new Llave(position = game.at(2, 11)) 
+    llaveActual = new Llave(position = game.at(12, 14)) 
     
     // Villano verde patrullando en la zona media
     villanoActual = new Villano(
       position = game.at(7, 5), 
-      nombre = "envenenador",
+      nombre = "demoledor",
       direccion = este,
       camino = [este, oeste],
       mensajesAtaque = ["TOMA ESTO!"]
