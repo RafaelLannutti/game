@@ -23,15 +23,7 @@ class Villano inherits Personaje {
   }
 
   method veAl(heroe) {
-    const vx = self.position().x()
-    const vy = self.position().y()
-    const hx = heroe.position().x()
-    const hy = heroe.position().y()
-    if (direccion == norte) return (hx == vx && hy > vy && !self.hayObstaculoEntreY(vx, vy, hy))
-    if (direccion == sur)   return (hx == vx && hy < vy && !self.hayObstaculoEntreY(vx, hy, vy))
-    if (direccion == este)  return (hy == vy && hx > vx && !self.hayObstaculoEntreX(vx, hx, vy))
-    if (direccion == oeste) return (hy == vy && hx < vx && !self.hayObstaculoEntreX(hx, vx, vy))
-    return false
+    return direccion.enLineaDeVision(self, heroe)
   }
 
   method hayObstaculoEntreX(xMin, xMax, y) {

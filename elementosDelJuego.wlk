@@ -5,21 +5,54 @@ import villanos.*
 object norte {
   method siguiente(position) = position.up(1)
   method numero() = 2
+  method enLineaDeVision(villano, heroe) {
+    const vx = villano.position().x()
+    const vy = villano.position().y()
+    const hx = heroe.position().x()
+    const hy = heroe.position().y()
+    
+    return (hx == vx && hy > vy && !villano.hayObstaculoEntreY(vx, vy, hy))
+  }
+  
 }
 
 object sur {
   method siguiente(position) = position.down(1)
   method numero() = 1
+  method enLineaDeVision(villano, heroe) {
+    const vx = villano.position().x()
+    const vy = villano.position().y()
+    const hx = heroe.position().x()
+    const hy = heroe.position().y()
+    
+    return (hx == vx && hy < vy && !villano.hayObstaculoEntreY(vx, hy, vy))
+  }
 }
 
 object este {
   method siguiente(position) = position.right(1)
   method numero() = 3
+  method enLineaDeVision(villano, heroe) {
+    const vx = villano.position().x()
+    const vy = villano.position().y()
+    const hx = heroe.position().x()
+    const hy = heroe.position().y()
+    
+    return (hx == vx && hy > vy && !villano.hayObstaculoEntreY(vx, vy, hy))
+  }
 }
 
 object oeste {
   method siguiente(position) = position.left(1)
   method numero() = 4
+  method enLineaDeVision(villano, heroe) {
+    const vx = villano.position().x()
+    const vy = villano.position().y()
+    const hx = heroe.position().x()
+    const hy = heroe.position().y()
+    
+    return (hx == vx && hy > vy && !villano.hayObstaculoEntreY(vx, vy, hy))
+  }
 }
 
 class Personaje {
