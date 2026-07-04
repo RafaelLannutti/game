@@ -98,13 +98,10 @@ class Villano inherits Personaje {
     }
   }
 
-  method puntosOtorgados() = nivel.puntosPorDerrotar(self)
-
   override method recibirImpacto(papa) {
     if (!estaTransformado) {
       estaTransformado = true
       animal = ["condor", "lagarto", "llama", "mula"].anyOne()
-      papa.personaje().ganarPuntos(self.puntosOtorgados())
       if (estaAtacando) {
         estaAtacando = false
         game.say(self, "")

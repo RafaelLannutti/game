@@ -91,7 +91,6 @@ class Nivel {
 
   method yMaximoPara(x)
 
-  method puntosPorDerrotar(villano)
 }
 
 object nivel1 inherits Nivel(
@@ -114,11 +113,6 @@ object nivel1 inherits Nivel(
     if (x.between(12,13))  return 8
     return 8
   }
-
-  override method puntosPorDerrotar(villano) {
-    if (villano.nombre() == "demoledor") return 10
-    return 5
-  }
 }
 
 object nivel2 inherits Nivel(
@@ -133,11 +127,6 @@ object nivel2 inherits Nivel(
 ) {
   override method yMaximoPara(x) {
     if (x.between(1, 2) or x.between(12, 13)) return 9
-    return 10
-  }
-
-  override method puntosPorDerrotar(villano) {
-    if (villano.nombre() == "demoledor") return 15
     return 10
   }
 }
@@ -211,26 +200,7 @@ class NivelHUD {
   method recibirImpacto(papa) {}
 }
 
-class DigitoPuntajeHUD {
-  var property position
-  var property indice
-  var property personaje
 
-  method image() {
-    const digito = self.obtenerDigito()
-    return "n" + digito + ".png"
-  }
-
-  method obtenerDigito() {
-    const pts = personaje.puntos()
-    const divisor = if (indice == 0) 100
-                    else if (indice == 1) 10
-                    else 1
-    return ((pts / divisor).truncate(0) % 10).toString()
-  }
-
-  method recibirImpacto(papa) {}
-}
 
 class Papa {
   var property position
